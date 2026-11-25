@@ -1,0 +1,19 @@
+{
+  "name": "meta-capi-test-site",
+  "version": "1.0.0",
+  "description": "Local and Cloudflare Workers sandbox website to test Meta Pixel (Dataset), Conversions API (CAPI), deduplication, and form submissions across all standard and custom events.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/capi.test.js",
+    "cf:dev": "wrangler dev",
+    "cf:dry-run": "wrangler deploy --dry-run",
+    "cf:deploy": "wrangler deploy"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.168.0"
+  }
+}

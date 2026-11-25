@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Meta Pixel &amp; Signal Studio</title>
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Meta Pixel &amp; Signal Studio" />
+	<meta property="og:description" content="Professional test lab for Meta Pixel scripts, standard events, custom events, microdata, and form submissions." />
+	<link rel="stylesheet" href="/styles.css" />
+
+	<!-- ======================================================== -->
+	<!-- META PIXEL BASE SCRIPT                                   -->
+	<!-- Paste your Meta Pixel code snippet here or in the UI box -->
+	<!-- ======================================================== -->
+	<script id="embedded-meta-pixel">
+		/* Paste your Meta Pixel script here if embedding directly */
+	</script>
+	<!-- End Meta Pixel Code -->
+</head>
+<body>
+	<!-- Top Navigation Header -->
+	<header class="app-header">
+		<div class="header-container">
+			<div class="brand">
+				<div class="brand-logo" aria-hidden="true">
+					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path>
+						<path d="M12 6v6l4 2"></path>
+					</svg>
+				</div>
+				<div class="brand-text">
+					<h1>Meta Pixel &amp; Signal Studio</h1>
+					<span class="badge badge-subtle">Cloudflare Edge &bull; Conversions &amp; Datasets</span>
+				</div>
+			</div>
+
+			<div class="status-bar">
+				<div id="pixel-status-pill" class="status-pill status-muted">
+					<span class="dot"></span>
+					<span class="label">Pixel: Not Detected</span>
+				</div>
+				<div id="fbp-status-pill" class="status-pill status-muted">
+					<span class="label">_fbp: none</span>
+				</div>
+				<div id="fbc-status-pill" class="status-pill status-muted">
+					<span class="label">_fbc: none</span>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<div class="app-container">
+		<!-- Integration Card (Script Editor) -->
+		<section class="card script-section" aria-label="Meta Pixel Script Integration">
+			<div class="card-header">
+				<div class="card-title-group">
+					<div class="title-with-badge">
+						<h2>Meta Pixel Code Snippet</h2>
+						<span class="badge badge-accent">Client-Side Script</span>
+					</div>
+					<p class="card-subtitle">
+						Paste your official Meta Pixel snippet below (or embed inside <code>&lt;head&gt;</code> in <code>index.html</code>). No manual Pixel ID or API Token inputs needed.
+					</p>
+				</div>
+				<div class="card-header-actions">
+					<button id="btn-sample-script" class="btn btn-outline btn-sm" type="button">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+						Demo Template
+					</button>
+					<button id="btn-clear-script" class="btn btn-ghost btn-sm" type="button">Clear</button>
+				</div>
+			</div>
+
+			<div class="code-editor-wrapper">
+				<div class="editor-header">
+					<span class="editor-lang">HTML &bull; &lt;script&gt;</span>
+					<span id="editor-char-count" class="editor-info">Ready to execute</span>
+				</div>
+				<textarea
+					id="cfg-pixel-script"
+					class="code-textarea"
+					rows="4"
+					placeholder="<!-- Meta Pixel Code -->&#10;<script>&#10;!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');&#10;fbq('init', 'YOUR_PIXEL_ID');&#10;fbq('track', 'PageView');&#10;</script>"
+					spellcheck="false"
+				></textarea>
+			</div>
+
+			<div class="script-footer">
+				<div class="footer-buttons">
+					<button id="btn-apply-script" class="btn btn-primary" type="button">
+						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+						Apply &amp; Run Script
+					</button>
+					<button id="btn-fire-all" class="btn btn-success" type="button">
+						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+						Fire All 18 Standard Events
+					</button>
+				</div>
+				<div id="script-feedback" class="feedback-banner" role="status" aria-live="polite"></div>
+			</div>
+		</section>
+
+		<!-- Main Workspace Layout -->
+		<div class="workspace-grid">
+			<!-- Left Column: Tabs & Event Workflows -->
+			<div class="primary-col">
+				<!-- Tab Navigation -->
+				<nav class="nav-tabs" role="tablist" aria-label="Test Modes">
+					<button class="nav-tab is-active" data-tab="events-tab" role="tab" aria-selected="true" type="button">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+						<span>18 Standard Events</span>
+					</button>
+					<button class="nav-tab" data-tab="form-tab" role="tab" aria-selected="false" type="button">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+						<span>Lead &amp; Registration Form</span>
+					</button>
+					<button class="nav-tab" data-tab="funnel-tab" role="tab" aria-selected="false" type="button">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+						<span>E-Commerce Funnel &amp; Microdata</span>
+					</button>
+					<button class="nav-tab" data-tab="arch-tab" role="tab" aria-selected="false" type="button">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="7" height="6" rx="1.5"></rect><rect x="15" y="3" width="7" height="6" rx="1.5"></rect><rect x="8.5" y="15" width="7" height="6" rx="1.5"></rect><path d="M5.5 9v3h13V9"></path><path d="M12 12v3"></path></svg>
+						<span>Architecture &amp; Pipeline</span>
+					</button>
+				</nav>
+
+				<!-- TAB 1: 18 Standard Events & Custom Event Editor -->
+				<section id="events-tab" class="tab-panel is-active">
+					<div class="card">
+						<div class="card-header">
+							<div>
+								<h2>Official Standard Event Catalog</h2>
+								<p class="card-subtitle">Click any event tile to fire it instantly via your Meta Pixel script.</p>
+							</div>
+							<div class="category-filters">
+								<button class="chip is-active" data-filter="all" type="button">All (18)</button>
+								<button class="chip" data-filter="ecommerce" type="button">E-Commerce</button>
+								<button class="chip" data-filter="leads" type="button">Leads &amp; Growth</button>
+								<button class="chip" data-filter="discovery" type="button">Discovery</button>
+							</div>
+						</div>
+						<div id="standard-events-grid" class="events-grid"></div>
+					</div>
+
+					<div class="card editor-card">
+						<div class="card-header">
+							<div>
+								<h2>Event Payload Editor &amp; Custom Events</h2>
+								<p class="card-subtitle">Customize parameters or test custom event triggers (<code>fbq('trackCustom', ...)</code>).</p>
+							</div>
+							<button id="btn-fire-custom" class="btn btn-outline btn-sm" type="button">Switch to Custom Event Mode</button>
+						</div>
+
+						<div class="form-row form-row-3">
+							<div class="form-field">
+								<label for="editor-event-name">Event Name</label>
+								<input id="editor-event-name" type="text" value="Purchase" placeholder="e.g. Purchase or CustomAction" />
+							</div>
+							<div class="form-field">
+								<label for="editor-event-kind">Event Kind</label>
+								<select id="editor-event-kind">
+									<option value="standard">Standard: fbq('track')</option>
+									<option value="custom">Custom: fbq('trackCustom')</option>
+								</select>
+							</div>
+							<div class="form-field">
+								<label for="editor-event-id">Event ID Override <small class="text-muted">(auto-UUID if empty)</small></label>
+								<input id="editor-event-id" type="text" placeholder="Auto-generated unique event_id" />
+							</div>
+						</div>
+
+						<div class="form-field">
+							<div class="field-label-row">
+								<label for="editor-custom-data"><code>custom_data</code> JSON Payload</label>
+								<div class="preset-links">
+									<button type="button" class="text-link" data-preset="purchase">Purchase</button>
+									<button type="button" class="text-link" data-preset="lead">Lead</button>
+									<button type="button" class="text-link" data-preset="view">ViewContent</button>
+								</div>
+							</div>
+							<textarea id="editor-custom-data" class="code-textarea" rows="4" spellcheck="false"></textarea>
+						</div>
+
+						<div class="form-actions">
+							<button id="btn-fire-editor" class="btn btn-primary" type="button">
+								<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+								Fire Configured Event
+							</button>
+						</div>
+					</div>
+				</section>
+
+				<!-- TAB 2: Form Submission & Advanced Matching -->
+				<section id="form-tab" class="tab-panel" hidden>
+					<div class="card">
+						<div class="card-header">
+							<div>
+								<h2>Lead &amp; Registration Form Simulation</h2>
+								<p class="card-subtitle">
+									Submits via real HTTP <code>POST /api/form-submit</code> and fires the matching Meta event (e.g. <code>Lead</code>). Includes standard semantic field names so Meta Automatic Advanced Matching and the Event Setup Tool detect them naturally.
+								</p>
+							</div>
+							<span class="badge badge-accent">Event Setup Tool Ready</span>
+						</div>
+
+						<form id="lead-test-form" class="lead-form">
+							<!-- Group 1: Personal Details -->
+							<div class="form-group-section">
+								<h3 class="group-title">1. Personal Information</h3>
+								<div class="form-row form-row-2">
+									<div class="form-field">
+										<label>First Name (<code>fn</code>)</label>
+										<input name="first_name" type="text" autocomplete="given-name" placeholder="John" />
+									</div>
+									<div class="form-field">
+										<label>Last Name (<code>ln</code>)</label>
+										<input name="last_name" type="text" autocomplete="family-name" placeholder="Doe" />
+									</div>
+								</div>
+								<div class="form-row form-row-2">
+									<div class="form-field">
+										<label>Email Address (<code>em</code>)</label>
+										<input name="email" type="email" autocomplete="email" placeholder="john.doe@example.com" />
+									</div>
+									<div class="form-field">
+										<label>Phone Number (<code>ph</code>)</label>
+										<input name="phone" type="tel" autocomplete="tel" placeholder="+14155550100" />
+									</div>
+								</div>
+							</div>
+
+							<!-- Group 2: Address / Location -->
+							<div class="form-group-section">
+								<h3 class="group-title">2. Location &amp; Demographics</h3>
+								<div class="form-row form-row-4">
+									<div class="form-field">
+										<label>City (<code>ct</code>)</label>
+										<input name="city" type="text" autocomplete="address-level2" placeholder="San Francisco" />
+									</div>
+									<div class="form-field">
+										<label>State (<code>st</code>)</label>
+										<input name="state" type="text" autocomplete="address-level1" placeholder="CA" />
+									</div>
+									<div class="form-field">
+										<label>Zip / Postal (<code>zp</code>)</label>
+										<input name="zip" type="text" autocomplete="postal-code" placeholder="94105" />
+									</div>
+									<div class="form-field">
+										<label>Country (<code>country</code>)</label>
+										<input name="country" type="text" maxlength="2" autocomplete="country" placeholder="US" />
+									</div>
+								</div>
+								<div class="form-row form-row-3">
+									<div class="form-field">
+										<label>Gender (<code>ge</code>)</label>
+										<select name="gender">
+											<option value="">Not Specified</option>
+											<option value="m">Male (m)</option>
+											<option value="f">Female (f)</option>
+										</select>
+									</div>
+									<div class="form-field">
+										<label>Date of Birth (<code>db</code>, YYYYMMDD)</label>
+										<input name="dob" type="text" placeholder="19920514" />
+									</div>
+									<div class="form-field">
+										<label>External ID (<code>external_id</code>)</label>
+										<input name="external_id" type="text" placeholder="CRM-USER-9401" />
+									</div>
+								</div>
+							</div>
+
+							<!-- Group 3: Event & Value Details -->
+							<div class="form-group-section">
+								<h3 class="group-title">3. Meta Event Trigger</h3>
+								<div class="form-row form-row-3">
+									<div class="form-field">
+										<label>Event Fired on Submit</label>
+										<select name="form_event_name">
+											<option value="Lead" selected>Lead</option>
+											<option value="CompleteRegistration">CompleteRegistration</option>
+											<option value="SubmitApplication">SubmitApplication</option>
+											<option value="Contact">Contact</option>
+											<option value="Schedule">Schedule</option>
+											<option value="Subscribe">Subscribe</option>
+										</select>
+									</div>
+									<div class="form-field">
+										<label>Conversion Value</label>
+										<input name="value" type="number" step="0.01" value="25.00" />
+									</div>
+									<div class="form-field">
+										<label>Currency</label>
+										<input name="currency" type="text" maxlength="3" value="USD" />
+									</div>
+								</div>
+								<div class="form-field">
+									<label>Inquiry Message / Notes</label>
+									<textarea name="notes" rows="2" placeholder="Describe customer inquiry or service request..."></textarea>
+								</div>
+							</div>
+
+							<!-- Form Actions -->
+							<div class="form-submit-bar">
+								<button class="btn btn-primary btn-lg" type="submit">
+									<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"></path><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+									Submit Form &amp; Fire Event
+								</button>
+								<button id="btn-sync-user-data" class="btn btn-outline" type="button">
+									Apply to Advanced Matching (<code>fbq init</code>)
+								</button>
+								<button id="btn-reset-form" class="btn btn-ghost" type="reset">Reset Form</button>
+							</div>
+						</form>
+					</div>
+				</section>
+
+				<!-- TAB 3: E-Commerce Funnel & Microdata -->
+				<section id="funnel-tab" class="tab-panel" hidden>
+					<div class="card">
+						<div class="card-header">
+							<div>
+								<h2>E-Commerce Funnel &amp; Schema.org Microdata</h2>
+								<p class="card-subtitle">
+									Step through the standard purchase conversion funnel. Updates the live Schema.org <code>Product</code> microdata block in real time for Meta catalog crawlers.
+								</p>
+							</div>
+							<span class="badge badge-accent">Microdata Enabled</span>
+						</div>
+
+						<!-- Funnel Progress Stepper -->
+						<div class="funnel-stepper">
+							<button class="stepper-step" data-funnel-event="Search" type="button">
+								<span class="step-num">1</span>
+								<span class="step-label">Search</span>
+							</button>
+							<span class="stepper-arrow">&rarr;</span>
+							<button class="stepper-step" data-funnel-event="ViewContent" type="button">
+								<span class="step-num">2</span>
+								<span class="step-label">ViewContent</span>
+							</button>
+							<span class="stepper-arrow">&rarr;</span>
+							<button class="stepper-step" data-funnel-event="AddToWishlist" type="button">
+								<span class="step-num">3</span>
+								<span class="step-label">Wishlist</span>
+							</button>
+							<span class="stepper-arrow">&rarr;</span>
+							<button class="stepper-step" data-funnel-event="AddToCart" type="button">
+								<span class="step-num">4</span>
+								<span class="step-label">AddToCart</span>
+							</button>
+							<span class="stepper-arrow">&rarr;</span>
+							<button class="stepper-step" data-funnel-event="InitiateCheckout" type="button">
+								<span class="step-num">5</span>
+								<span class="step-label">Checkout</span>
+							</button>
+							<span class="stepper-arrow">&rarr;</span>
+							<button class="stepper-step" data-funnel-event="AddPaymentInfo" type="button">
+								<span class="step-num">6</span>
+								<span class="step-label">Payment</span>
+							</button>
+							<span class="stepper-arrow">&rarr;</span>
+							<button class="stepper-step stepper-primary" data-funnel-event="Purchase" type="button">
+								<span class="step-num"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+								<span class="step-label">Purchase</span>
+							</button>
+						</div>
+
+						<!-- Funnel Item Configuration -->
+						<div class="form-row form-row-4">
+							<div class="form-field">
+								<label>Product SKU (<code>content_ids</code>)</label>
+								<input id="funnel-product-id" type="text" value="SKU-NEO-PRO" />
+							</div>
+							<div class="form-field">
+								<label>Product Title (<code>content_name</code>)</label>
+								<input id="funnel-product-name" type="text" value="Ultralight Performance Runner" />
+							</div>
+							<div class="form-field">
+								<label>Category (<code>content_category</code>)</label>
+								<input id="funnel-category" type="text" value="Footwear / Athletics" />
+							</div>
+							<div class="form-field">
+								<label>Price (<code>value</code>)</label>
+								<input id="funnel-price" type="number" step="0.01" value="129.99" />
+							</div>
+						</div>
+
+						<div class="form-row form-row-3">
+							<div class="form-field">
+								<label>Currency</label>
+								<input id="funnel-currency" type="text" maxlength="3" value="USD" />
+							</div>
+							<div class="form-field">
+								<label>Quantity (<code>num_items</code>)</label>
+								<input id="funnel-qty" type="number" min="1" value="1" />
+							</div>
+							<div class="form-field">
+								<label>Order ID (for Purchase)</label>
+								<input id="funnel-order-id" type="text" placeholder="Auto-generated ORD-..." />
+							</div>
+						</div>
+
+						<!-- Microdata Live Preview Card -->
+						<div class="microdata-preview-card" itemscope itemtype="https://schema.org/Product">
+							<div class="microdata-badge">
+								<span class="dot-green"></span> Schema.org Product Microdata (Active in DOM)
+							</div>
+							<div class="product-preview-layout">
+								<div class="product-icon-box" aria-hidden="true">
+									<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--brand-meta)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+								</div>
+								<div class="product-info-box">
+									<meta itemprop="productID" id="md-id" content="SKU-NEO-PRO" />
+									<h3 itemprop="name" id="md-name">Ultralight Performance Runner</h3>
+									<span itemprop="category" id="md-category" class="product-cat">Footwear / Athletics</span>
+									<div class="product-offer" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+										<span class="price-tag">
+											<span itemprop="priceCurrency" id="md-currency">USD</span>
+											<span itemprop="price" id="md-price">129.99</span>
+										</span>
+										<link itemprop="availability" href="https://schema.org/InStock" />
+										<span class="stock-badge">In Stock &bull; Auto-Sync</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- TAB 4: Dual-Signal Architecture & Deduplication Pipeline -->
+				<section id="arch-tab" class="tab-panel" hidden>
+					<div class="card arch-card">
+						<div class="card-header">
+							<div>
+								<h2>Meta Pixel + CAPI Dual-Signal Architecture</h2>
+								<p class="card-subtitle">Designed with Diagram-Design principles. Visualizing client-to-edge dispatch and cryptographic deduplication.</p>
+							</div>
+							<div class="arch-legend">
+								<span class="legend-item"><span class="legend-swatch swatch-client"></span>Client Browser</span>
+								<span class="legend-item"><span class="legend-swatch swatch-edge"></span>Edge Worker</span>
+								<span class="legend-item"><span class="legend-swatch swatch-meta"></span>Meta Graph &amp; Dataset</span>
+							</div>
+						</div>
+
+						<!-- Diagram SVG Container -->
+						<div class="diagram-wrapper">
+							<svg viewBox="0 0 940 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Meta Pixel and CAPI Architecture Diagram" class="diagram-svg">
+								<defs>
+									<pattern id="arch-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+										<circle cx="2" cy="2" r="1" fill="#cbd5e1" opacity="0.45" />
+									</pattern>
+									<marker id="arrow-solid" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+										<polygon points="0 0, 8 3, 0 6" fill="#475569" />
+									</marker>
+									<marker id="arrow-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+										<polygon points="0 0, 8 3, 0 6" fill="#1877f2" />
+									</marker>
+									<marker id="arrow-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+										<polygon points="0 0, 8 3, 0 6" fill="#16a34a" />
+									</marker>
+								</defs>
+
+								<!-- Canvas Background -->
+								<rect width="100%" height="100%" fill="#ffffff" rx="10" />
+								<rect width="100%" height="100%" fill="url(#arch-dots)" rx="10" />
+
+								<!-- ZONE 1: Client Environment -->
+								<rect x="20" y="32" width="260" height="400" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2" />
+								<rect x="36" y="24" width="130" height="16" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+								<text x="101" y="35" fill="#64748b" font-size="8" font-weight="700" text-anchor="middle" letter-spacing="0.1em">CLIENT · BROWSER RUNTIME</text>
+
+								<!-- Node 1.1: DOM Actions -->
+								<g class="diagram-node" data-node="dom">
+									<rect x="36" y="56" width="228" height="66" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+									<text x="50" y="77" fill="#0f172a" font-size="12" font-weight="700">DOM User Interactions</text>
+									<text x="50" y="93" fill="#64748b" font-size="10">Clicks, Cart additions, Form submissions</text>
+									<rect x="50" y="101" width="56" height="14" rx="3" fill="#f1f5f9" />
+									<text x="78" y="111" fill="#475569" font-size="8" font-weight="600" text-anchor="middle">DOM EVENT</text>
+								</g>
+
+								<!-- Node 1.2: Pixel SDK -->
+								<g class="diagram-node" data-node="pixel">
+									<rect x="36" y="146" width="228" height="78" rx="6" fill="#ffffff" stroke="#93c5fd" stroke-width="1.2" />
+									<text x="50" y="167" fill="#1d4ed8" font-size="12" font-weight="700">Meta Pixel (fbq)</text>
+									<text x="50" y="183" fill="#64748b" font-size="10">Generates unique event_id &amp; payload</text>
+									<text x="50" y="197" fill="#64748b" font-size="10">Captures _fbp &amp; _fbc cookies</text>
+									<rect x="50" y="204" width="70" height="14" rx="3" fill="#eff6ff" />
+									<text x="85" y="214" fill="#1d4ed8" font-size="8" font-weight="600" text-anchor="middle">fbevents.js SDK</text>
+								</g>
+
+								<!-- Node 1.3: Dual Dispatcher -->
+								<g class="diagram-node" data-node="dispatch">
+									<rect x="36" y="248" width="228" height="74" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+									<text x="50" y="269" fill="#0f172a" font-size="12" font-weight="700">Dual Signal Dispatcher</text>
+									<text x="50" y="285" fill="#64748b" font-size="10">Synchronizes same event_id across</text>
+									<text x="50" y="299" fill="#64748b" font-size="10">Browser (Pixel) and Server (CAPI)</text>
+									<rect x="50" y="304" width="74" height="14" rx="3" fill="#f1f5f9" />
+									<text x="87" y="314" fill="#475569" font-size="8" font-weight="600" text-anchor="middle">ID GENERATOR</text>
+								</g>
+
+								<!-- ZONE 2: Cloudflare Edge Worker -->
+								<rect x="306" y="32" width="288" height="400" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2" />
+								<rect x="322" y="24" width="160" height="16" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+								<text x="402" y="35" fill="#64748b" font-size="8" font-weight="700" text-anchor="middle" letter-spacing="0.1em">CLOUDFLARE EDGE WORKER</text>
+
+								<!-- Node 2.1: Ingestion API -->
+								<g class="diagram-node" data-node="edge-ingest">
+									<rect x="322" y="56" width="256" height="76" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+									<text x="336" y="77" fill="#0f172a" font-size="12" font-weight="700">API Endpoint Ingestion</text>
+									<text x="336" y="93" fill="#64748b" font-size="10">POST /api/capi/send &amp; Form handlers</text>
+									<text x="336" y="107" fill="#64748b" font-size="10">Zero-trust validation &amp; rate guard</text>
+									<rect x="336" y="113" width="74" height="14" rx="3" fill="#f1f5f9" />
+									<text x="373" y="123" fill="#475569" font-size="8" font-weight="600" text-anchor="middle">WORKER ROUTE</text>
+								</g>
+
+								<!-- Node 2.2: SHA-256 Hasher -->
+								<g class="diagram-node" data-node="hasher">
+									<rect x="322" y="156" width="256" height="84" rx="6" fill="#ffffff" stroke="#86efac" stroke-width="1.2" />
+									<text x="336" y="177" fill="#15803d" font-size="12" font-weight="700">PII Normalizer &amp; SHA-256 Hasher</text>
+									<text x="336" y="193" fill="#64748b" font-size="10">Email, Phone, City, Postal Code</text>
+									<text x="336" y="207" fill="#64748b" font-size="10">One-way crypto hash before transit</text>
+									<rect x="336" y="215" width="82" height="14" rx="3" fill="#ecfdf5" />
+									<text x="377" y="225" fill="#15803d" font-size="8" font-weight="600" text-anchor="middle">SUBTLECRYPTO</text>
+								</g>
+
+								<!-- Node 2.3: Context Enrichment -->
+								<g class="diagram-node" data-node="enrich">
+									<rect x="322" y="264" width="256" height="74" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+									<text x="336" y="285" fill="#0f172a" font-size="12" font-weight="700">Request Context Enrichment</text>
+									<text x="336" y="301" fill="#64748b" font-size="10">Extracts client_ip_address &amp; user_agent</text>
+									<text x="336" y="315" fill="#64748b" font-size="10">Injects test_event_code when active</text>
+									<rect x="336" y="321" width="86" height="14" rx="3" fill="#f1f5f9" />
+									<text x="379" y="331" fill="#475569" font-size="8" font-weight="600" text-anchor="middle">EDGE HEADERS</text>
+								</g>
+
+								<!-- ZONE 3: Meta Cloud -->
+								<rect x="622" y="32" width="298" height="400" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2" />
+								<rect x="638" y="24" width="170" height="16" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+								<text x="723" y="35" fill="#64748b" font-size="8" font-weight="700" text-anchor="middle" letter-spacing="0.1em">META CLOUD &amp; DATASET</text>
+
+								<!-- Node 3.1: Conversions API -->
+								<g class="diagram-node" data-node="capi-ingest">
+									<rect x="638" y="56" width="266" height="76" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+									<text x="652" y="77" fill="#0f172a" font-size="12" font-weight="700">Meta Graph API (CAPI)</text>
+									<text x="652" y="93" fill="#64748b" font-size="10">graph.facebook.com/v21.0/{id}/events</text>
+									<text x="652" y="107" fill="#64748b" font-size="10">Bearer token authenticated transport</text>
+									<rect x="652" y="113" width="70" height="14" rx="3" fill="#f1f5f9" />
+									<text x="687" y="123" fill="#475569" font-size="8" font-weight="600" text-anchor="middle">GRAPH API v21</text>
+								</g>
+
+								<!-- Node 3.2: FOCAL DEDUPLICATION ENGINE -->
+								<g class="diagram-node node-focal" data-node="dedup">
+									<rect x="638" y="160" width="266" height="116" rx="8" fill="#eff6ff" stroke="#1877f2" stroke-width="2" />
+									<text x="652" y="184" fill="#1e40af" font-size="13" font-weight="800">Deduplication Engine</text>
+									<text x="652" y="202" fill="#1e3a8a" font-size="11" font-weight="600">Matches: event_name + event_id</text>
+									<text x="652" y="218" fill="#3b82f6" font-size="10">48-Hour Deduplication Window</text>
+									<text x="652" y="234" fill="#475569" font-size="10">Pairs browser signal with server signal.</text>
+									<text x="652" y="248" fill="#475569" font-size="10">Prevents double-counting conversions.</text>
+									<rect x="652" y="254" width="102" height="15" rx="3" fill="#1877f2" />
+									<text x="703" y="265" fill="#ffffff" font-size="8" font-weight="700" text-anchor="middle">PRIMARY FOCAL NODE</text>
+								</g>
+
+								<!-- Node 3.3: Dataset & EMQ -->
+								<g class="diagram-node" data-node="emq">
+									<rect x="638" y="304" width="266" height="74" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+									<text x="652" y="325" fill="#0f172a" font-size="12" font-weight="700">Dataset Attribution &amp; EMQ</text>
+									<text x="652" y="341" fill="#64748b" font-size="10">Event Match Quality scoring (0-10)</text>
+									<text x="652" y="355" fill="#64748b" font-size="10">Ad delivery optimization &amp; reporting</text>
+									<rect x="652" y="361" width="80" height="14" rx="3" fill="#f1f5f9" />
+									<text x="692" y="371" fill="#475569" font-size="8" font-weight="600" text-anchor="middle">EVENTS MANAGER</text>
+								</g>
+
+								<!-- CONNECTORS: Orthogonal Rounded Paths -->
+								<!-- 1. DOM to Pixel SDK -->
+								<path d="M 150,122 V 146" fill="none" stroke="#64748b" stroke-width="1.3" marker-end="url(#arrow-solid)" />
+
+								<!-- 2. Pixel to Dispatcher -->
+								<path d="M 150,224 V 248" fill="none" stroke="#64748b" stroke-width="1.3" marker-end="url(#arrow-solid)" />
+
+								<!-- 3. Direct Browser Pixel Stream (Orthogonal elbow to Meta Cloud) -->
+								<path d="M 264,185 H 614 Q 622,185 622,193 V 205 Q 622,213 630,213 H 638" fill="none" stroke="#1877f2" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#arrow-blue)" />
+								<rect x="420" y="177" width="94" height="16" rx="3" fill="#eff6ff" stroke="#bfdbfe" stroke-width="0.8" />
+								<text x="467" y="188" fill="#1d4ed8" font-size="8" font-weight="700" text-anchor="middle">BROWSER SIGNAL</text>
+
+								<!-- 4. Client to Edge Ingestion -->
+								<path d="M 264,285 H 290 Q 298,285 298,277 V 102 Q 298,94 306,94 H 322" fill="none" stroke="#475569" stroke-width="1.3" marker-end="url(#arrow-solid)" />
+								<rect x="272" y="180" width="54" height="14" rx="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+								<text x="299" y="190" fill="#475569" font-size="7" font-weight="600" text-anchor="middle">HTTPS POST</text>
+
+								<!-- 5. Edge Ingestion to Hasher -->
+								<path d="M 450,132 V 156" fill="none" stroke="#16a34a" stroke-width="1.3" marker-end="url(#arrow-green)" />
+
+								<!-- 6. Hasher to Context Enrichment -->
+								<path d="M 450,240 V 264" fill="none" stroke="#16a34a" stroke-width="1.3" marker-end="url(#arrow-green)" />
+
+								<!-- 7. Edge Worker to Meta Conversions API -->
+								<path d="M 578,94 H 638" fill="none" stroke="#475569" stroke-width="1.3" marker-end="url(#arrow-solid)" />
+								<rect x="585" y="86" width="46" height="15" rx="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.8" />
+								<text x="608" y="97" fill="#475569" font-size="7" font-weight="600" text-anchor="middle">BEARER</text>
+
+								<!-- 8. Conversions API to Deduplication Engine -->
+								<path d="M 771,132 V 160" fill="none" stroke="#1877f2" stroke-width="1.5" marker-end="url(#arrow-blue)" />
+
+								<!-- 9. Deduplication Engine to EMQ / Dataset -->
+								<path d="M 771,276 V 304" fill="none" stroke="#1877f2" stroke-width="1.5" marker-end="url(#arrow-blue)" />
+							</svg>
+						</div>
+
+						<!-- Interactive Architecture Inspector Card -->
+						<div class="arch-inspector" id="arch-inspector-box">
+							<div class="inspector-badge-row">
+								<span class="badge badge-accent" id="arch-info-tier">Focal Component</span>
+								<h3 id="arch-info-title">Meta Event Deduplication Engine</h3>
+							</div>
+							<p id="arch-info-desc">
+								When both Meta Pixel (client) and Conversions API (server) send the same user interaction, Meta uses the combined <code>event_name</code> and <code>event_id</code> parameters within a 48-hour window to keep exactly one event for reporting and ad attribution while merging both data payloads to maximize match quality.
+							</p>
+							<div class="arch-meta-grid">
+								<div class="meta-card">
+									<span class="meta-label">Primary Keys</span>
+									<code class="meta-code">event_name, event_id</code>
+								</div>
+								<div class="meta-card">
+									<span class="meta-label">Window</span>
+									<code class="meta-code">48 Hours Retention</code>
+								</div>
+								<div class="meta-card">
+									<span class="meta-label">Client Cookies</span>
+									<code class="meta-code">_fbp, _fbc (First Party)</code>
+								</div>
+								<div class="meta-card">
+									<span class="meta-label">Data Privacy</span>
+									<code class="meta-code">SHA-256 One-Way Hash</code>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+
+			<!-- Right Column: Live Event Stream & Inspector -->
+			<aside class="inspector-col">
+				<div class="card inspector-card">
+					<div class="inspector-header">
+						<div class="inspector-title-group">
+							<div class="live-dot-pulse"></div>
+							<h2>Signal Stream</h2>
+							<span id="log-count-badge" class="badge badge-counter">0</span>
+						</div>
+						<button id="btn-clear-log" class="btn btn-ghost btn-sm" type="button">Clear</button>
+					</div>
+					<p class="inspector-sub">Real-time log of <code>fbq</code> pixel fires, unique <code>event_id</code>s, and payload parameters.</p>
+
+					<div id="event-log" class="event-stream" role="log" aria-live="polite">
+						<div class="empty-state">
+							<div class="empty-icon" aria-hidden="true">
+								<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h.01"></path><path d="M7 20v-4"></path><path d="M12 20v-8"></path><path d="M17 20V8"></path><path d="M22 4v16"></path></svg>
+							</div>
+							<p>No signals captured yet.</p>
+							<small>Paste your Meta Pixel script above and trigger any standard event or form submission.</small>
+						</div>
+					</div>
+				</div>
+			</aside>
+		</div>
+	</div>
+
+	<script src="/app.js" type="module"></script>
+</body>
+</html>
